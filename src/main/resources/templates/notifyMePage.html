@@ -1,0 +1,76 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Notify Me</title>
+</head>
+
+<body onLoad="showLimits()">
+<!-- Include _menu.html -->
+<th:block th:include="/_menu"></th:block>
+
+<h2>Создание нового напоминания</h2>
+
+<div th:if="${errorMessage!=null}"
+     style="color:red;font-style:italic" th:utext="${errorMessage}">..
+</div>
+
+<form th:action="@{/notifyMe}" th:object="${notification}" method="POST">
+    <table>
+
+        <tr>
+            <td>Текст сообщения</td>
+            <td><input type="text" th:field="*{message}" required/></td>
+        </tr>
+        <tr>
+            <td>Когда напомнить?</td>
+            <td><input type="datetime-local" th:field="*{time}" required/></td>
+        </tr>
+        <tr>
+            <td>Тип напоминания</td>
+            <td><select id="selectNotificationType" th:field="*{notificationType}" onChange="showLimits()" required>
+                <option th:each="notificationType : ${T(com.example.notificationservice.entity.NotificationType).values()}"
+                        th:value="${notificationType}" th:text="${notificationType}"></option>
+            </select>
+            </td>
+        </tr>
+        <tr>
+            <td id="inputText"></td>
+            <td><input id="testInput" type="email" th:field="*{extraParams}" required/></td>
+        </tr>
+        <tr>
+            <td>&nbsp;</td>
+            <td><input type="submit" value="Создать"/></td>
+        </tr>
+    </table>
+    <div th:if="${success!=null}"
+         style="color:green;font-style:italic" th:utext="${success}">..
+    </div>
+</form>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function showLimits() {
+
+        var testInput = document.getElementById("testInput");
+        var inputText = document.getElementById("inputText");
+        var e = document.getElementById("selectNotificationType");
+        var strUser = e.options[e.selectedIndex].value;
+        var emailType = /*[[${T(com.example.notificationservice.entity.NotificationType).MAIL}]]*/ null;
+        var httpType = /*[[${T(com.example.notificationservice.entity.NotificationType).HTTP}]]*/ null;
+
+        if (strUser == emailType) {
+            testInput.type = "email";
+            inputText.innerText = "EMAIL"
+        } else if (strUser == httpType) {
+            testInput.type = "url";
+            testInput.pattern = "http.*";
+            inputText.innerText = "URL"
+        }
+    }
+
+    $(function () {
+        showLimits();
+    });
+    /*]]>*/
+</script>
+</body>
+</html>

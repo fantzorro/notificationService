@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>NotifyMe</title>
+
+    <style>
+        th, td {
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+<!-- Include _menu.html -->
+<th:block th:include="/_menu"></th:block>
+
+<h2>Напоминания</h2>
+<table border="1">
+    <tr>
+        <th>External ID</th>
+        <th>Message</th>
+        <th>Time</th>
+        <th>Notification type</th>
+        <th>Extra params</th>
+    </tr>
+    <tr th:each="notificationsList : ${notificationsLists}">
+        <td th:utext="${notificationsList.externalId}">..</td>
+        <td th:utext="${notificationsList.message}">..</td>
+        <td th:utext="${notificationsList.time}">..</td>
+        <td th:utext="${notificationsList.notificationType}">..</td>
+        <td th:utext="${notificationsList.extraParams}">..</td>
+    </tr>
+
+</table>
+</body>
+</html>
